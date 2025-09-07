@@ -70,13 +70,60 @@
 
     <!-- main section start -->
     <main>
-        <section>
-            <!--! build it leter -->
+        <section class="pt-10 px-3 md:px-6">
+            <div class="mb-10">
+                <h1 class="text-2xl text-center font-bold md:text-3xl">Choose Your Trees</h1>
+            </div>
+
+            <div class="flex flex-col md:flex-row md:gap-4">
+
+            <!-- Category section -->
+            <div class="md:max-w-[200px] pb-2 w-full basis-1/4 rounded-2xl">
+                <div class="text-center md:text-left py-4">
+                    <h1 class="font-bold text-[1.3rem]">Categories</h1>
+                </div>
+                <div id="category-container" class="px-2 flex flex-wrap justify-center items-center gap-2 md:grid md:justify-normal md:items-stretch">
+
+                </div>
+            </div>
+
+            <!-- plant showcase section start -->
+            <div class="basis-3/3 mt-4 md:mt-0">
+                <div id="plant-card-container" class="grid md:grid-cols-3 gap-4">
+
+                </div>
+            </div>
+            <!-- plant showcase section end -->
+
+            <!-- cart section start -->
+            <div class="bg-white rounded-2xl mt-5 md:mt-0 shadow-sm basis-1/4">
+                <div class="text-center md:text-left py-3">
+                    <h1 class="font-bold text-[1.3rem] md:pl-3">Your Cart</h1>
+                </div>
+                <div class=" mb-4 mx-4">
+                    <div class="p-3 flex justify-between items-center rounded-2xl bg-[#F0FDF4]">
+                        <div>
+                            <h1 class="font-bold text-[1rem] pb-1">Title</h1>
+                            <p class="text-[1rem] text-[#1F2937]/60">Price x Quantity</p>
+                        </div>
+                        <div class="flex justify-center items-center">
+                            <h1 class="text-xl text-[#1F2937]/60 cursor-pointer"><i class="fa-solid fa-xmark"></i></h1>
+                        </div>
+                    </div>
+                    <hr class="my-2 mx-2">
+                    <div class="flex justify-between items-center">
+                        <h1 class="pl-3 font-medium text-[1.2rem]">Total:</h1>
+                        <p class="font-medium text-[1.2rem] pr-4">৳ <span>1000</span></p>
+                    </div>
+                </div>
+            </div>
+            <!-- cart section end -->
+            </div>
         </section>
 
         <!-- about section start -->
         <section class="max-w-[1140px] mx-auto my-20 space-y-8">
-            <h1 class="text-center text-2xl mb-5 md:text-3xl font-semibold">About the Campaign</h1>
+            <h1 class="text-center text-2xl pb-10 md:text-3xl font-semibold">About the Campaign</h1>
             <div class="grid text-center justify-center items-center gap-4 md:gap-10 md:flex">
                 <div class="p-5 md:p-0 md:w-full">
                     <img src="./assets/about.png" alt="">

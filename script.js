@@ -19,8 +19,8 @@ const displayByCategory = (plants) => {
                 </div>
                 <div>
                 <div class="mb-3">
-                        <h1 class="text-2xl font-semibold mb-3">${plant.name}</h1>
-                        <p class="text-[1rem] text-[#1F2937]/80">${plant.description}</p>
+                    <h1 onclick="loadPlantDetail(${plant.id})" class="text-2xl font-semibold mb-3 cursor-pointer select-none">${plant.name}</h1>
+                    <p class="text-[1rem] text-[#1F2937]/80">${plant.description}</p>
                 </div>
                     <div class="flex justify-between items-center">
                         <h1 class="text-[1rem] text-[#15803D] font-[Geist] font-medium py-2 px-3 bg-[#DCFCE7] rounded-full">${plant.category}</h1>
@@ -86,6 +86,98 @@ const displayCategories = (categories) =>{
     }
 }
 loadCategories()
+
+
+//  Add to cart functionality start
+
+const addToCart = (id)=>{
+    fetch(`https://openapi.programming-hero.com/api/plant/${id}`)
+    .then(res => res.json())
+    .then(data => displayCart(data.plants))
+}
+
+
+
+//  Add to cart functionality start
+
+
+// call displayCart(plant) when user clicks "Add to Cart"
+
+const displayCart = (plant) => {
+  const cartContainer = document.getElementById("cart-container");
+
+  let alreadyAddedItem = document.getElementById(`cart-item-${plant.id}`);
+
+  if (alreadyAddedItem) {
+    // only update quantity (don't touch the price span)
+    const cartQuantity = alreadyAddedItem.querySelector(".cart-count");
+    const cartCount = parseInt(cartQuantity.textContent) || 0;
+    const newCartQuantity = cartCount + 1;
+    cartQuantity.textContent = newCartQuantity;
+  } else {
+    // create new item
+    const cartDiv = document.createElement("div");
+    cartDiv.id = `cart-item-${plant.id}`;
+    cartDiv.dataset.subTotal = plant.price; // store unit price
+
+    cartDiv.innerHTML = `
+      <div class="p-3 flex justify-between items-center rounded-2xl bg-[#F0FDF4]">
+        <div>
+          <h1 class="font-bold text-[1rem] pb-1">${plant.name}</h1>
+          <p class="text-[1rem] text-[#1F2937]/60">
+            <span class="cart-total-price">${plant.price}</span>
+            x <span class="cart-count">1</span>
+          </p>
+        </div>
+        <div class="flex justify-center items-center">
+          <h1 class="remove-cart-item text-xl text-[#1F2937]/60 cursor-pointer"><i class="fa-solid fa-xmark"></i></h1>
+        </div>
+      </div>
+    `;
+
+    // remove/decrease handler
+    const removeFromCart = cartDiv.querySelector(".remove-cart-item");
+    removeFromCart.addEventListener("click", () => {
+      const cartQuantity = cartDiv.querySelector(".cart-count");
+      const cartCount = parseInt(cartQuantity.textContent) || 0;
+
+      if (cartCount > 1) {
+        cartQuantity.textContent = cartCount - 1;
+      } else {
+        cartDiv.remove();
+      }
+
+      totalAmount();
+    });
+
+    cartContainer.append(cartDiv);
+  }
+
+  // update grand total after any change
+  totalAmount();
+};
+
+function totalAmount() {
+  const cartItems = document.querySelectorAll("#cart-container > div");
+  let grandTotal = 0;
+
+  cartItems.forEach(item => {
+    const unitPrice = parseFloat(item.dataset.subTotal) || 0; // fixed unit price
+    const qty = parseInt(item.querySelector(".cart-count").textContent) || 0;
+    grandTotal += unitPrice * qty;
+  });
+
+  const cartTotalEl = document.getElementById("cart-total");
+  if (cartTotalEl) {
+    cartTotalEl.textContent = grandTotal;
+  }
+}
+
+
+
+//  Add to cart functionality end
+
+
 // load categorie start
 
 // load all trees start
@@ -95,6 +187,7 @@ const loadPlants = () =>{
     .then(res => res.json())
     .then(plants => displayPlants(plants.plants))
 }
+
 
 const displayPlants = (plants) =>{
 
@@ -109,17 +202,15 @@ const displayPlants = (plants) =>{
                 <div class="rounded-2xl mb-4">
                     <img src="${plant.image}" loading="lazy" alt="photo" class="rounded-2xl h-[30vh] w-full object-cover transition duration-300 ease-in-out">
                 </div>
-                <div>
                 <div class="mb-3">
-                        <h1 onclick="loadPlantDetail(${plant.id})" class="text-2xl font-semibold mb-3 cursor-pointer">${plant.name}</h1>
-                        <p class="text-[1rem]">${plant.description}</p>
+                    <h1 onclick="loadPlantDetail(${plant.id})" class="text-2xl font-semibold mb-3 cursor-pointer select-none">${plant.name}</h1>
+                    <p class="text-[1rem]">${plant.description}</p>
                 </div>
-                    <div class="flex justify-between items-center">
-                        <h1 class="text-[1rem] text-[#15803D] font-[Geist] font-medium py-2 px-3 bg-[#DCFCE7] rounded-full">${plant.category}</h1>
-                        <p class="text-xl text-[#1F2937] font-semibold">৳ <span>${plant.price}</span></p>
-                    </div>
-                    <button class="btn btn-soft btn-warning mt-5 h-12 rounded-full border-none bg-[#15803D] text-[1rem] text-white w-full">Add to Cart</button>
+                <div class="flex justify-between items-center">
+                    <h1 class="text-[1rem] text-[#15803D] font-[Geist] font-medium py-2 px-3 bg-[#DCFCE7] rounded-full">${plant.category}</h1>
+                    <p class="text-xl text-[#1F2937] font-semibold">৳ <span>${plant.price}</span></p>
                 </div>
+                <button onclick="addToCart(${plant.id})" class="btn btn-soft btn-warning mt-5 h-12 rounded-full border-none bg-[#15803D] text-[1rem] text-white w-full">Add to Cart</button>
             </div>
         `
         plantCardContainer.append(plantParentDiv)
@@ -129,5 +220,3 @@ const displayPlants = (plants) =>{
 
 
 loadPlants()
-
-// load all trees end

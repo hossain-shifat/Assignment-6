@@ -20,7 +20,7 @@ const displayByCategory = (plants) => {
                 <div>
                 <div class="mb-3">
                         <h1 class="text-2xl font-semibold mb-3">${plant.name}</h1>
-                        <p class="text-[1rem]">${plant.description}</p>
+                        <p class="text-[1rem] text-[#1F2937]/80">${plant.description}</p>
                 </div>
                     <div class="flex justify-between items-center">
                         <h1 class="text-[1rem] text-[#15803D] font-[Geist] font-medium py-2 px-3 bg-[#DCFCE7] rounded-full">${plant.category}</h1>
@@ -36,6 +36,33 @@ const displayByCategory = (plants) => {
 
 // load by category end
 
+
+// load plant detail start
+const loadPlantDetail = (id) =>{
+    fetch(`https://openapi.programming-hero.com/api/plant/${id}`)
+    .then(res => res.json())
+    .then(data => displayPlantDetail(data.plants))
+}
+
+const displayPlantDetail = (plant) => {
+    const plantDetailBox = document.getElementById("plant-detail-container")
+    plantDetailBox.innerHTML = `
+            <div class="p-3">
+                <h1 class="text-2xl font-semibold mb-3">${plant.name}</h1>
+                <div>
+                    <img src="${plant.image}" alt="photo" class="rounded-2xl h-[30vh] w-full object-cover ">
+                </div>
+                <div class="mt-3">
+                    <h1 class="text-lg font-semibold">Catecory: <span class="font-normal text-[#1F2937]/80">${plant.category}</span></h1>
+                    <p class="text-lg font-semibold">Price: <span class="font-normal text-[#1F2937]/80">৳ ${plant.price}</span></p>
+                    <p class="text-lg font-semibold">Description: <span class="font-normal text-[#1F2937]/80">${plant.description}</span></p>
+                </div>
+            </div>
+    `
+    document.getElementById("plant_detail_modal").showModal()
+}
+
+// load plant detail end
 
 
 
@@ -66,10 +93,10 @@ loadCategories()
 const loadPlants = () =>{
     fetch("https://openapi.programming-hero.com/api/plants")
     .then(res => res.json())
-    .then(plants => displayPlanst(plants.plants))
+    .then(plants => displayPlants(plants.plants))
 }
 
-const displayPlanst = (plants) =>{
+const displayPlants = (plants) =>{
 
     const plantCardContainer = document.getElementById("plant-card-container")
     plantCardContainer.innerHTML = ""
@@ -84,7 +111,7 @@ const displayPlanst = (plants) =>{
                 </div>
                 <div>
                 <div class="mb-3">
-                        <h1 class="text-2xl font-semibold mb-3">${plant.name}</h1>
+                        <h1 onclick="loadPlantDetail(${plant.id})" class="text-2xl font-semibold mb-3 cursor-pointer">${plant.name}</h1>
                         <p class="text-[1rem]">${plant.description}</p>
                 </div>
                     <div class="flex justify-between items-center">

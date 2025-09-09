@@ -26,7 +26,7 @@ const displayByCategory = (plants) => {
                         <h1 class="text-[1rem] text-[#15803D] font-[Geist] font-medium py-2 px-3 bg-[#DCFCE7] rounded-full">${plant.category}</h1>
                         <p class="text-xl text-[#1F2937] font-semibold">৳ <span>${plant.price}</span></p>
                     </div>
-                    <button class="btn btn-soft btn-warning mt-5 h-12 rounded-full border-none bg-[#15803D] text-[1rem] text-white w-full">Add to Cart</button>
+                    <button onclick="addToCart(${plant.id})" class="btn btn-soft btn-warning mt-5 h-12 rounded-full border-none bg-[#15803D] text-[1rem] text-white w-full">Add to Cart</button>
                 </div>
             </div>
         `
@@ -71,10 +71,11 @@ const displayPlantDetail = (plant) => {
 const loadCategories = ()=>{
     fetch("https://openapi.programming-hero.com/api/categories")
     .then(res => res.json())
-    .then(data => displayCategories(data.categories))
+    .then(data =>displayCategories(data.categories))
 }
 
 const displayCategories = (categories) =>{
+
     const categoryContainer = document.getElementById("category-container")
     categoryContainer.innerHTML = ""
     for(category of categories){
@@ -84,6 +85,7 @@ const displayCategories = (categories) =>{
         `
         categoryContainer.append(categoryDiv)
     }
+
 }
 loadCategories()
 
@@ -101,7 +103,7 @@ const addToCart = (id)=>{
 //  Add to cart functionality start
 
 
-// call displayCart(plant) when user clicks "Add to Cart"
+
 
 const displayCart = (plant) => {
   const cartContainer = document.getElementById("cart-container");
@@ -109,16 +111,16 @@ const displayCart = (plant) => {
   let alreadyAddedItem = document.getElementById(`cart-item-${plant.id}`);
 
   if (alreadyAddedItem) {
-    // only update quantity (don't touch the price span)
+
     const cartQuantity = alreadyAddedItem.querySelector(".cart-count");
     const cartCount = parseInt(cartQuantity.textContent) || 0;
     const newCartQuantity = cartCount + 1;
     cartQuantity.textContent = newCartQuantity;
   } else {
-    // create new item
+
     const cartDiv = document.createElement("div");
     cartDiv.id = `cart-item-${plant.id}`;
-    cartDiv.dataset.subTotal = plant.price; // store unit price
+    cartDiv.dataset.subTotal = plant.price;
 
     cartDiv.innerHTML = `
       <div class="p-3 flex justify-between items-center rounded-2xl bg-[#F0FDF4]">
@@ -135,7 +137,7 @@ const displayCart = (plant) => {
       </div>
     `;
 
-    // remove/decrease handler
+
     const removeFromCart = cartDiv.querySelector(".remove-cart-item");
     removeFromCart.addEventListener("click", () => {
       const cartQuantity = cartDiv.querySelector(".cart-count");
@@ -153,7 +155,7 @@ const displayCart = (plant) => {
     cartContainer.append(cartDiv);
   }
 
-  // update grand total after any change
+
   totalAmount();
 };
 

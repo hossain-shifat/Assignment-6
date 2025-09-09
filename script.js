@@ -56,24 +56,21 @@ const displayCart = (plant) => {
 
 function totalAmount() {
   const cartItems = document.querySelectorAll("#cart-container > div");
-  let grandTotal = 0;
+  let totalPrice = 0;
 
   cartItems.forEach(item => {
-    const unitPrice = parseFloat(item.dataset.subTotal) || 0; // fixed unit price
-    const qty = parseInt(item.querySelector(".cart-count").textContent) || 0;
-    grandTotal += unitPrice * qty;
+    const price = parseFloat(item.dataset.subTotal) || 0;
+    const cartItemCount = parseInt(item.querySelector(".cart-count").textContent) || 0;
+    totalPrice += price * cartItemCount;
   });
 
-  const cartTotalEl = document.getElementById("cart-total");
-  if (cartTotalEl) {
-    cartTotalEl.textContent = grandTotal;
+  const totalCartItem = document.getElementById("cart-total");
+  if (totalCartItem) {
+    totalCartItem.textContent = totalPrice;
   }
 }
 
 //  Add to cart functionality end
-
-
-
 
 
 

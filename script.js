@@ -1,3 +1,83 @@
+//  Add to cart functionality start
+
+const displayCart = (plant) => {
+  const cartContainer = document.getElementById("cart-container");
+
+  let alreadyAddedItem = document.getElementById(`cart-item-${plant.id}`);
+
+  if (alreadyAddedItem) {
+
+    const cartQuantity = alreadyAddedItem.querySelector(".cart-count");
+    const cartCount = parseInt(cartQuantity.textContent) || 0;
+    const newCartQuantity = cartCount + 1;
+    cartQuantity.textContent = newCartQuantity;
+  } else {
+
+    const cartDiv = document.createElement("div");
+    cartDiv.id = `cart-item-${plant.id}`;
+    cartDiv.dataset.subTotal = plant.price;
+
+    cartDiv.innerHTML = `
+      <div class="p-3 flex justify-between items-center rounded-2xl bg-[#F0FDF4]">
+        <div>
+          <h1 class="font-bold text-[1rem] pb-1">${plant.name}</h1>
+          <p class="text-[1rem] text-[#1F2937]/60">
+            <span class="cart-total-price">${plant.price}</span>
+            x <span class="cart-count">1</span>
+          </p>
+        </div>
+        <div class="flex justify-center items-center">
+          <h1 class="remove-cart-item text-xl text-[#1F2937]/60 cursor-pointer"><i class="fa-solid fa-xmark"></i></h1>
+        </div>
+      </div>
+    `;
+
+
+    const removeFromCart = cartDiv.querySelector(".remove-cart-item");
+    removeFromCart.addEventListener("click", () => {
+      const cartQuantity = cartDiv.querySelector(".cart-count");
+      const cartCount = parseInt(cartQuantity.textContent) || 0;
+
+      if (cartCount > 1) {
+        cartQuantity.textContent = cartCount - 1;
+      } else {
+        cartDiv.remove();
+      }
+
+      totalAmount();
+    });
+
+    cartContainer.append(cartDiv);
+  }
+
+
+  totalAmount();
+};
+
+function totalAmount() {
+  const cartItems = document.querySelectorAll("#cart-container > div");
+  let grandTotal = 0;
+
+  cartItems.forEach(item => {
+    const unitPrice = parseFloat(item.dataset.subTotal) || 0; // fixed unit price
+    const qty = parseInt(item.querySelector(".cart-count").textContent) || 0;
+    grandTotal += unitPrice * qty;
+  });
+
+  const cartTotalEl = document.getElementById("cart-total");
+  if (cartTotalEl) {
+    cartTotalEl.textContent = grandTotal;
+  }
+}
+
+//  Add to cart functionality end
+
+
+
+
+
+
+
 // load by category start
 const loadByCategory = (id)=>{
     fetch(`https://openapi.programming-hero.com/api/category/${id}`)
@@ -98,86 +178,6 @@ const addToCart = (id)=>{
     .then(data => displayCart(data.plants))
 }
 
-
-
-//  Add to cart functionality start
-
-
-
-
-const displayCart = (plant) => {
-  const cartContainer = document.getElementById("cart-container");
-
-  let alreadyAddedItem = document.getElementById(`cart-item-${plant.id}`);
-
-  if (alreadyAddedItem) {
-
-    const cartQuantity = alreadyAddedItem.querySelector(".cart-count");
-    const cartCount = parseInt(cartQuantity.textContent) || 0;
-    const newCartQuantity = cartCount + 1;
-    cartQuantity.textContent = newCartQuantity;
-  } else {
-
-    const cartDiv = document.createElement("div");
-    cartDiv.id = `cart-item-${plant.id}`;
-    cartDiv.dataset.subTotal = plant.price;
-
-    cartDiv.innerHTML = `
-      <div class="p-3 flex justify-between items-center rounded-2xl bg-[#F0FDF4]">
-        <div>
-          <h1 class="font-bold text-[1rem] pb-1">${plant.name}</h1>
-          <p class="text-[1rem] text-[#1F2937]/60">
-            <span class="cart-total-price">${plant.price}</span>
-            x <span class="cart-count">1</span>
-          </p>
-        </div>
-        <div class="flex justify-center items-center">
-          <h1 class="remove-cart-item text-xl text-[#1F2937]/60 cursor-pointer"><i class="fa-solid fa-xmark"></i></h1>
-        </div>
-      </div>
-    `;
-
-
-    const removeFromCart = cartDiv.querySelector(".remove-cart-item");
-    removeFromCart.addEventListener("click", () => {
-      const cartQuantity = cartDiv.querySelector(".cart-count");
-      const cartCount = parseInt(cartQuantity.textContent) || 0;
-
-      if (cartCount > 1) {
-        cartQuantity.textContent = cartCount - 1;
-      } else {
-        cartDiv.remove();
-      }
-
-      totalAmount();
-    });
-
-    cartContainer.append(cartDiv);
-  }
-
-
-  totalAmount();
-};
-
-function totalAmount() {
-  const cartItems = document.querySelectorAll("#cart-container > div");
-  let grandTotal = 0;
-
-  cartItems.forEach(item => {
-    const unitPrice = parseFloat(item.dataset.subTotal) || 0; // fixed unit price
-    const qty = parseInt(item.querySelector(".cart-count").textContent) || 0;
-    grandTotal += unitPrice * qty;
-  });
-
-  const cartTotalEl = document.getElementById("cart-total");
-  if (cartTotalEl) {
-    cartTotalEl.textContent = grandTotal;
-  }
-}
-
-
-
-//  Add to cart functionality end
 
 
 // load categorie start
